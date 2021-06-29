@@ -45,6 +45,7 @@ final _staticHandler =
 // Router instance to handler requests.
 final _router = shelf_router.Router()
   ..get('/helloworld', _helloWorldHandler)
+  ..get('/', _helloWorldHandler)
   ..get(
     '/time',
     (request) => Response.ok(DateTime.now().toUtc().toIso8601String()),

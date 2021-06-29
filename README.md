@@ -1,6 +1,11 @@
-A web server built using [Shelf](https://pub.dev/packages/shelf). Deploys to Heroku.
+A simple Dart HTTP server using [package:shelf](https://pub.dev/packages/shelf).
 
-See [video tutorial](https://youtu.be/JNpzkQEGs5M) here.
+- Listens on "any IP" (0.0.0.0) instead of loop-back (localhost, 127.0.0.1) to
+  allow remote connections.
+- Defaults to listening on port `8080`, but this can be configured by setting
+  the `PORT` environment variable. (This is also the convention used by
+  [Cloud Run](https://cloud.google.com/run).)
+- Includes `Dockerfile` for easy containerization
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+To deploy on [Cloud Run](https://cloud.google.com/run), follow
+[these instructions](https://cloud.google.com/run/docs/quickstarts/build-and-deploy/other).

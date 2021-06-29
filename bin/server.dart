@@ -5,18 +5,32 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
-Future main() async {
+var portEnv = Platform.environment['PORT'];
+var _hostname = portEnv == null ? 'localhost' : '0.0.0.0';
+Future main(List<String> args) async {
   // Serve files from the file system.
   final _staticHandler =
-   shelf_static.createStaticHandler('build', defaultDocument: 'index.html');
+      shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+// For Google Cloud Run, we respect the PORT environment variable
+  var parser = ArgParser()..addOption('port', abbr: 'p');
+  var result = parser.parse(args);
+  var portStr = result['port'] ?? portEnv ?? '8080';
+  var port = int.tryParse(portStr);
+
+  if (port == null) {
+    stdout.writeln('Could not parse port value "$portStr" into a number.');
+    // 64: command line usage error
+    exitCode = 64;
+    return;
+  }
 
   // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
@@ -33,15 +47,13 @@ Future main() async {
 
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(
-      pipeline,
-      InternetAddress.anyIPv4, // Allows external connections
-      port,
-      securityContext: SecurityContext.defaultContext);
+    pipeline,
+    _hostname, // Allows external connections
+    port,
+  );
 
   print('Serving at http://${server.address.host}:${server.port}');
 }
-
-
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()

@@ -11,6 +11,9 @@ import 'package:shelf_router/shelf_router.dart' as shelf_router;
 import 'package:shelf_static/shelf_static.dart' as shelf_static;
 
 Future main() async {
+  // Serve files from the file system.
+  final _staticHandler =
+   shelf_static.createStaticHandler('build', defaultDocument: 'index.html');
   // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
   // https://cloud.google.com/run/docs/reference/container-contract#port
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
@@ -38,9 +41,7 @@ Future main() async {
   print('Serving at http://${server.address.host}:${server.port}');
 }
 
-// Serve files from the file system.
-final _staticHandler =
-    shelf_static.createStaticHandler('build', defaultDocument: 'index.html');
+
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()

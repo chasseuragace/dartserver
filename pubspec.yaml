@@ -9,13 +9,13 @@ dependencies:
   shelf_router: ^1.0.0
   shelf_static: ^1.0.0
 
-scripts:
-  dev: webdev serve --auto restart
-  build: webdev build
-  dev_server:
-    - $build
-    - dart bin/server.dart
-  deploy: git push heroku master
+#scripts:
+#  dev: webdev serve --auto restart
+#  build: webdev build
+#  dev_server:
+#    - $build
+#    - dart bin/server.dart
+#  deploy: git push heroku master
 
 dev_dependencies:
   build_runner: '>=1.6.2 <2.0.0'

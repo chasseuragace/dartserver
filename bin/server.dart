@@ -30,10 +30,10 @@ Future main() async {
 
   // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
   final server = await shelf_io.serve(
-    pipeline,
-    InternetAddress.anyIPv4, // Allows external connections
-    port,
-  );
+      pipeline,
+      InternetAddress.anyIPv4, // Allows external connections
+      port,
+      securityContext: SecurityContext.defaultContext);
 
   print('Serving at http://${server.address.host}:${server.port}');
 }

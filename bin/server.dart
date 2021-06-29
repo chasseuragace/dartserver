@@ -40,7 +40,7 @@ Future main() async {
 
 // Serve files from the file system.
 final _staticHandler =
-    shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
+    shelf_static.createStaticHandler('build', defaultDocument: 'index.html');
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()

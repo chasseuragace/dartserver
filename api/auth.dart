@@ -242,3 +242,16 @@ class UserAuthentication {
     }
   }
 }
+
+extension e on Request {
+  get body async {
+    try {
+      return jsonDecode(
+              await read().cast<List<int>>().transform(Utf8Decoder()).join())
+          as Map<String, dynamic>;
+    } catch (e) {
+      print("ERROR PARSING BODY $e");
+      return null;
+    }
+  }
+}

@@ -6,7 +6,7 @@ class Database {
   late final Db _db;
   init() async {
     _db = await Db.create(
-        "mongodb+srv://chasseuragaceDB1:Hj028j7dvwmUruJH@cluster0.guoul.mongodb.net/myFirstDatabase?retryWrites=true");
+        "mongodb+srv://chasseuragaceDB1:2KhB8cKuHG94sjC@cluster0.guoul.mongodb.net/myFirstDatabase?retryWrites=true");
     await _db.open();
 
     print("connected to database");

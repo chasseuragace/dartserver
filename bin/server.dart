@@ -18,8 +18,8 @@ var _hostname = portEnv == null ? 'localhost' : '0.0.0.0';
 
 Future main(List<String> args) async {
   //setup database
-  database = Database();
-  await database.init();
+//   database = Database();
+//   await database.init();
 
   // Serve files from the file system.
   final _staticHandler =

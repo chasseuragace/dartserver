@@ -1,11 +1,12 @@
-A simple Dart HTTP server using [package:shelf](https://pub.dev/packages/shelf).
+# chasseur_api_server
 
-- Listens on "any IP" (0.0.0.0) instead of loop-back (localhost, 127.0.0.1) to
-  allow remote connections.
-- Defaults to listening on port `8080`, but this can be configured by setting
-  the `PORT` environment variable. (This is also the convention used by
-  [Cloud Run](https://cloud.google.com/run).)
-- Includes `Dockerfile` for easy containerization
+[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
+[![License: MIT][license_badge]][license_link]
+[![Powered by Dart Frog](https://img.shields.io/endpoint?url=https://tinyurl.com/dartfrog-badge)](https://dartfrog.vgv.dev)
 
-To deploy on [Cloud Run](https://cloud.google.com/run), follow
-[these instructions](https://cloud.google.com/run/docs/quickstarts/build-and-deploy/other).
+An example application built with dart_frog
+
+[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[license_link]: https://opensource.org/licenses/MIT
+[very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
+[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis

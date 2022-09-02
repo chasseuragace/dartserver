@@ -1,75 +1,43 @@
-// Copyright (c) 2021, the Dart project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, implicit_dynamic_list_literal
 
 import 'dart:io';
 
-import 'package:args/args.dart';
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart' as shelf_io;
-import 'package:shelf_router/shelf_router.dart' as shelf_router;
-import 'package:shelf_static/shelf_static.dart' as shelf_static;
+import 'package:dart_frog/dart_frog.dart';
 
-import '../api/auth.dart';
-import '../api/mongo_db.dart';
+import '../main.dart' as entrypoint;
+import '../routes/index.dart' as index;
+import '../routes/auth/register.dart' as auth_register;
 
-var portEnv = Platform.environment['PORT'];
-var _hostname = portEnv == null ? 'localhost' : '0.0.0.0';
+import '../routes/_middleware.dart' as middleware;
 
-Future main(List<String> args) async {
-  //setup database
-  database = Database();
-  await database.init();
+void main() => createServer();
 
-  // Serve files from the file system.
-  final _staticHandler =
-      shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
-  // If the "PORT" environment variable is set, listen to it. Otherwise, 8080.
-  // https://cloud.google.com/run/docs/reference/container-contract#port
-// For Google Cloud Run, we respect the PORT environment variable
-  var parser = ArgParser()..addOption('port', abbr: 'p');
-  var result = parser.parse(args);
-  var portStr = result['port'] ?? portEnv ?? '8080';
-  var port = int.tryParse(portStr);
-
-  if (port == null) {
-    stdout.writeln('Could not parse port value "$portStr" into a number.');
-    // 64: command line usage error
-    exitCode = 64;
-    return;
-  }
-
-  // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
-  final cascade = Cascade()
-      // First, serve files from the 'public' directory
-      .add(_staticHandler)
-      // If a corresponding file is not found, send requests to a `Router`
-      .add(_router);
-
-  // See https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html
-  final pipeline = Pipeline()
-      // See https://pub.dev/documentation/shelf/latest/shelf/logRequests.html
-      .addMiddleware(logRequests())
-      .addHandler(cascade.handler);
-
-  // See https://pub.dev/documentation/shelf/latest/shelf_io/serve.html
-  final server = await shelf_io.serve(
-    pipeline,
-    _hostname, // Allows external connections
-    port,
-  );
-
-  print('Serving at http://${server.address.host}:${server.port}');
+Future<HttpServer> createServer() async {
+  final ip = InternetAddress.anyIPv4;
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+  final handler = Cascade().add(buildRootHandler()).handler;
+  return entrypoint.run(handler, ip, port);
 }
 
-// Router instance to handler requests.
-final _router = shelf_router.Router()
-//user related routes
-  ..post('/users/update', UserAuthentication().update)
-  ..post('/users/update-password', UserAuthentication().updatePassword)
-  ..get('/users', UserAuthentication().getAll)
-  ..get('/users/login', UserAuthentication().login)
-  ..get('/users/find', UserAuthentication().find)
-  ..put('/users/add', UserAuthentication().add)
-  ..delete('/users/delete', UserAuthentication().delete);
-//
+Handler buildRootHandler() {
+  final pipeline = const Pipeline().addMiddleware(middleware.middleware);
+  final router = Router()
+    ..mount('/auth', (r) => buildAuthHandler()(r))
+    ..mount('/', (r) => buildHandler()(r));
+  return pipeline.addHandler(router);
+}
+
+Handler buildAuthHandler() {
+  final pipeline = const Pipeline();
+  final router = Router()
+    ..all('/register', auth_register.onRequest);
+  return pipeline.addHandler(router);
+}
+
+Handler buildHandler() {
+  final pipeline = const Pipeline();
+  final router = Router()
+    ..all('/', index.onRequest);
+  return pipeline.addHandler(router);
+}

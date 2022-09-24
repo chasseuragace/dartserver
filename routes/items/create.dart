@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 
 import '../../app/database/db.dart';
-
 import '../../app/database/models/items/items.dart';
 import '../../app/database/models/user.dart';
 
@@ -24,8 +23,7 @@ Future<Response> onRequest(RequestContext context) async {
     );
   } on AppExceptions catch (e) {
     return Response.json(
-        statusCode: HttpStatus.expectationFailed,
-        body: {'message': e.toString()});
+        statusCode: HttpStatus.expectationFailed, body: e.toResponse());
   } on LogicEception {
     return Response.json(
         statusCode: HttpStatus.unauthorized,
@@ -43,7 +41,8 @@ Future<Items> _createNewProduct(String body) async {
   try {
     item = Items.fromJson(body);
   } on Exception {
-    throw AppExceptions(messgae: "Payload is not valid!");
+    throw AppExceptions(
+        json: Items.dummy().toMap(), messgae: "Payload is not valid!");
   }
 
   return item = Items.fromMap(await Collection<Items>().save(item));

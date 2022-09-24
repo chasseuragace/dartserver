@@ -39,7 +39,7 @@ class User extends Coll {
   String toJson() => json.encode(toMap());
   @override
   Map<String, dynamic> toMap() => {
-        'id': id,
+        '_id': oid,
         'email': email,
         'code': code,
         'role': role?.name,

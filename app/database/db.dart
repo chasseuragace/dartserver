@@ -1,15 +1,23 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
-import '../../routes/auth/register.dart';
 import '../locator.dart';
 import 'models/base/collections.dart';
 
 class AppExceptions implements Exception {
-  AppExceptions({required this.messgae});
+  AppExceptions({required this.messgae, this.json});
   final String messgae;
+  final dynamic json;
   @override
   String toString() {
     return messgae;
+  }
+
+  Map<String, dynamic> toResponse() {
+    Map<String, dynamic> body = {
+      "message": messgae,
+    };
+    if (json != null) body.putIfAbsent("expected", () => json);
+    return body;
   }
 }
 
@@ -73,9 +81,9 @@ class Collection<T> {
     Map<String, dynamic> newData,
   ) async {
     try {
-      print("$old $newData");
       final collection = appDb.db.collection(T.toString());
-
+      final existing = await findBy(old);
+      existing.updateAll((key, value) => newData[key] ?? value);
       final result = await collection.findAndModify(
         query: old,
         update: newData,

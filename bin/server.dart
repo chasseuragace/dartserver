@@ -7,6 +7,7 @@ import 'package:dart_frog/dart_frog.dart';
 
 import '../main.dart' as entrypoint;
 import '../routes/index.dart' as index;
+import '../routes/user/update.dart' as user_update;
 import '../routes/user/profile.dart' as user_profile;
 import '../routes/items/update.dart' as items_update;
 import '../routes/items/delete.dart' as items_delete;
@@ -56,7 +57,7 @@ Handler buildItemsHandler() {
 Handler buildUserHandler() {
   final pipeline = const Pipeline().addMiddleware(user_middleware.middleware);
   final router = Router()
-    ..all('/profile', user_profile.onRequest);
+    ..all('/update', user_update.onRequest)..all('/profile', user_profile.onRequest);
   return pipeline.addHandler(router);
 }
 

@@ -6,7 +6,6 @@ import 'package:dart_frog/dart_frog.dart';
 
 import '../../app/auth/authentication.dart';
 import '../../app/database/db.dart';
-
 import '../../app/database/models/user.dart';
 import '../../app/mail_sender/mail_sender.dart';
 
@@ -24,11 +23,11 @@ Future<Response> onRequest(RequestContext context) async {
     try {
       requestedUser = User.fromMap(body);
       print(requestedUser.toMap());
-      if (requestedUser.name == null) throw LogicEception();
+      if (requestedUser.email == null) throw LogicEception();
     } on Exception {
       return Response.json(
         statusCode: HttpStatus.expectationFailed,
-        body: {'message': 'payload is not valid'},
+        body: {'message': 'payload is not valid '},
       );
     }
 
@@ -56,7 +55,7 @@ Future<Response> onRequest(RequestContext context) async {
     await MailService().sendMail(
       'Veriying your phone number',
       'use <b>$code</b> to confirm your account!',
-      'chasseuragace@gmail.com',
+      user.email,
     );
 
     return Response.json(body: {

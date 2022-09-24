@@ -22,6 +22,16 @@ class Items extends Coll {
       this.image,
       this.oid});
 
+  factory Items.dummy() {
+    return Items(
+        brand: "String",
+        colors: ["String"],
+        image: [Image.dummy()],
+        name: "String",
+        price: 1234.00,
+        sizes: [1, 2]);
+  }
+
   factory Items.fromMap(Map<String, dynamic> data) => Items(
         oid: data['_id'] != null ? data['_id'] as ObjectId : null,
         name: data['name'] as String?,
@@ -35,7 +45,7 @@ class Items extends Coll {
       );
 
   Map<String, dynamic> toMap() => {
-        'id': oid,
+        '_id': oid,
         'name': name,
         'colors': colors,
         'sizes': sizes,

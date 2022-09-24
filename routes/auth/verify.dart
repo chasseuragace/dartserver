@@ -19,7 +19,7 @@ Future<Response> onRequest(RequestContext context) async {
 
   final result = await verifyUsersCode(email, code);
   return Response.json(
-    body: {'message': result ? 'Verified successfully' : 'Error Verifyig '},
+    body: {'message': result ? 'Verified successfully' : 'Error Verifying '},
   );
 }
 
@@ -35,7 +35,8 @@ Future<bool> verifyUsersCode(String email, String code) async {
 
     await Collection<User>().update(user.toMap(), updated);
     return true;
-  } on Exception {
+  } on Exception catch (e) {
+    print(e);
     return false;
   }
 }

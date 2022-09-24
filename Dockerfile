@@ -1,6 +1,5 @@
 # Official Dart image: https://hub.docker.com/_/dart
 # Specify the Dart SDK base image version using dart:<version> (ex: dart:2.17)
-RUN brew tap dart-lang/dart && brew install dart
 FROM dart:stable AS build
 
 WORKDIR /app

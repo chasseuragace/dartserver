@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
-
 class Image {
   final String? url;
   final String? hash;
@@ -29,4 +27,8 @@ class Image {
   ///
   /// Converts [Image] to a JSON string.
   String toJson() => json.encode(toMap());
+
+  factory Image.dummy() {
+    return Image(hash: "String", url: "String");
+  }
 }
